@@ -206,8 +206,8 @@ class NotificationService {
 
     try {
       if (type === 'birthday') {
-        const age = this.calculateAge(employee.birthday || '1990-01-01');
-        const message = `🧪 TEST: Happy Birthday, ${employee.name}! You would be ${age} today.`;
+        const age = this.calculateAge(employee.birthday || '2000-01-01');
+        const message = `🧪 TEST: Happy Birthday, ${employee.name}! You would be ${employee.age}th today.`;
         results.email = await this.sendEmailNotification(employee, message, 'birthday');
       } else {
         const years = this.calculateYearsOfService(employee.joinDate || '2020-01-01');
