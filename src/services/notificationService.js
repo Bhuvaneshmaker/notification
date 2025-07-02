@@ -61,20 +61,18 @@ class NotificationService {
 
   generateBirthdayMessage(employee, age) {
     const messages = [
-      `🎉 Happy Birthday, ${employee.name}! 🎂 Wishing you a fantastic ${age}th birthday filled with joy and success!`,
-      `🎊 It's your special day, ${employee.name}! 🎁 Happy ${age}th Birthday! Have an amazing year ahead!`,
-      `🎂 Happy Birthday ${employee.name}! 🎉 Wishing you happiness and laughter on your ${age}th!`
+      `🎉 Happy Birthday, ${employee.name}! 🎂 Wishing you a fantastic ${age}th birthday filled with joy, happiness, and success. May your special day be full of laughter and unforgettable moments, 
+      and may the year ahead bring you amazing opportunities and endless reasons to celebrate! 🎁`
     ];
-    return messages[Math.floor(Math.random() * messages.length)];
+    return messages;
   }
 
   generateAnniversaryMessage(employee, years) {
     const messages = [
-      `🎉 Congratulations, ${employee.name}! 🏆 Today marks ${years} amazing years with us!`,
-      `🎊 Happy Work Anniversary, ${employee.name}! 🎯 ${years} years of impact and growth!`,
-      `🏅 ${years} years strong, ${employee.name}! 🎉 Thank you for everything you bring to the team.`
+    `🎉 Congratulations, ${employee.name}! 🏆 Today marks ${years} amazing years with us, filled with impact, growth, and dedication. Thank you for everything you bring to the 
+    team — your contributions truly make a difference. Here’s to many more successful years ahead! 🎯`
     ];
-    return messages[Math.floor(Math.random() * messages.length)];
+    return messages;
   }
 
   async sendEmailNotification(employee, message, type) {
