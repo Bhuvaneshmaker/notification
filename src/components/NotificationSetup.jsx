@@ -1,15 +1,25 @@
 import React, { useState } from 'react';
-import { Settings, Mail, TestTube, Save } from 'lucide-react';
+import { Settings, Mail, Save, CheckCircle, TestTube } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { notificationService } from '../services/notificationService';
 
-const EmailNotificationSetup = () => {
+const NotificationSetup = () => {
   const [isOpen, setIsOpen] = useState(false);
+  
+  // Test contact information
   const [testContact, setTestContact] = useState({
     email: '',
     name: 'Test User'
   });
-  const [testing, setTesting] = useState(false);
+
+  const [testing, setTesting] = useState({
+    email: false
+  });
+
+  const handleSave = () => {
+    toast.success('🎉 Notification settings saved successfully!');
+    setIsOpen(false);
+  };
 
   const sendTestEmail = async () => {
     if (!testContact.email) {
@@ -17,7 +27,7 @@ const EmailNotificationSetup = () => {
       return;
     }
 
-    setTesting(true);
+    setTesting(prev => ({ ...prev, email: true }));
     try {
       const testEmployee = {
         id: 'test',
@@ -27,7 +37,7 @@ const EmailNotificationSetup = () => {
       };
 
       const result = await notificationService.sendTestNotification(testEmployee, 'birthday');
-
+      
       if (result.success && result.results.email?.success) {
         toast.success('✅ Test email sent successfully! Check your inbox.');
       } else {
@@ -38,82 +48,95 @@ const EmailNotificationSetup = () => {
       console.error('Test email error:', error);
       toast.error(`❌ Test email failed: ${error.message}`);
     } finally {
-      setTesting(false);
+      setTesting(prev => ({ ...prev, email: false }));
     }
   };
 
   return (
     <div className="relative">
-      {/* Trigger Button */}
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors shadow-md"
       >
         <Settings size={20} />
-        <span className="hidden sm:inline">Email Notification Test</span>
+        <span className="hidden sm:inline">Setup Notifications</span>
       </button>
 
-      {/* Modal */}
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
-            <div className="flex items-center justify-between border-b pb-3">
-              <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                <Mail size={20} /> Test Email Notification
-              </h3>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Input Fields */}
-            <div className="mt-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                <input
-                  type="text"
-                  value={testContact.name}
-                  onChange={(e) => setTestContact({ ...testContact, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  placeholder="Test User"
-                />
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-semibold text-gray-800">📧 Notification Setup</h3>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  ✕
+                </button>
               </div>
+              <p className="text-gray-600 mt-2 font-bold"> Test email notifications</p>
+            </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input
-                  type="email"
-                  value={testContact.email}
-                  onChange={(e) => setTestContact({ ...testContact, email: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  placeholder="test@example.com"
-                />
+            <div className="p-6 space-y-6">
+
+              {/* Test Section */}
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                <h4 className="flex items-center gap-2 font-semibold text-purple-800 mb-4">
+                  <TestTube size={20} />
+                  Test Email Notifications
+                </h4>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Test Name
+                    </label>
+                    <input
+                      type="text"
+                      value={testContact.name}
+                      onChange={(e) => setTestContact(prev => ({ ...prev, name: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                      placeholder="Test User"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Test Email
+                    </label>
+                    <input
+                      type="email"
+                      value={testContact.email}
+                      onChange={(e) => setTestContact(prev => ({ ...prev, email: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                      placeholder="test@example.com"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={sendTestEmail}
+                    disabled={testing.email || !testContact.email}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
+                  >
+                    {testing.email ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <span>Sending...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Mail size={16} />
+                        <span>Test Email</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Test Button */}
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={sendTestEmail}
-                disabled={testing || !testContact.email}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
-              >
-                {testing ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Sending...</span>
-                  </>
-                ) : (
-                  <>
-                    <TestTube size={16} />
-                    <span>Send Test Email</span>
-                  </>
-                )}
-              </button>
-            </div>
 
           </div>
         </div>
@@ -122,4 +145,4 @@ const EmailNotificationSetup = () => {
   );
 };
 
-export default EmailNotificationSetup;
+export default NotificationSetup;
