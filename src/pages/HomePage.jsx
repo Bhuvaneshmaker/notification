@@ -57,7 +57,7 @@ const HomePage = () => {
             <div></div>
             <NotificationSetup />
           </div>
-          <p className="text-gray-600 text-lg font-bold">Celebrating every milestone, every year! 🎉</p>
+          <p className="text-gray-600 text-lg font-bold animate-bounce">Celebrating every milestone, every year! 🎉</p>
         </div>
 
         {/* Today's Celebrations */}
