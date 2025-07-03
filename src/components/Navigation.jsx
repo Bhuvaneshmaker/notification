@@ -20,7 +20,7 @@ const Navigation = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 text-2xl font-bold text-purple-800">
             <Gift className="text-pink-600" />
-            Day Celebraty
+            Day Celebrity
             <Cake className="text-pink-600" />
           </Link>
 
