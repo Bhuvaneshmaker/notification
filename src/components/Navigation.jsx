@@ -19,9 +19,9 @@ const Navigation = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 text-2xl font-bold text-purple-800">
-            <Gift className="text-pink-600" />
+            <Gift className="text-pink-600 animate-bounce" />
             Day Celebrity
-            <Cake className="text-pink-600" />
+            <Cake className="text-pink-600 animate-bounce" />
           </Link>
 
           {/* Navigation Links and Notification Center */}
