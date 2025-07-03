@@ -1,15 +1,15 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc, query, orderBy } from 'firebase/firestore';
 
-// Firebase configuration
+// Firebase configuration using environment variables
 const firebaseConfig = {
-  apiKey: "AIzaSyDWf5ufZip3ZV-QaM98D97G8EM3lcfli68",
-  authDomain: "birthday-wish-a09aa.firebaseapp.com",
-  projectId: "birthday-wish-a09aa",
-  storageBucket: "birthday-wish-a09aa.appspot.com",
-  messagingSenderId: "917216787421",
-  appId: "1:917216787421:web:d50d24c4d98f2da1249434",
-  measurementId: "G-LDH40RDQ0B"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
@@ -17,14 +17,14 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
 export const employeeService = {
-//add employee in the data
+  // Add employee in the database
   async addEmployee(employee) {
     try {
       const id = String(employee.id || Date.now());
       const docRef = doc(db, 'employees', id);
       await setDoc(docRef, {
         ...employee,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       });
       return { id, ...employee };
     } catch (error) {
@@ -33,19 +33,19 @@ export const employeeService = {
     }
   },
 
-  // Get all employees for the data
+  // Get all employees from the database
   async getEmployees() {
     try {
       const q = query(collection(db, 'employees'), orderBy('id'));
       const snapshot = await getDocs(q);
-      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
       console.error('Error fetching employees:', error);
       throw error;
     }
   },
 
-  // Delete employee from the data
+  // Delete employee from the database
   async deleteEmployee(employeeId) {
     try {
       const docRef = doc(db, 'employees', employeeId);
@@ -55,5 +55,5 @@ export const employeeService = {
       console.error('Error deleting employee:', error);
       throw error;
     }
-  }
+  },
 };
