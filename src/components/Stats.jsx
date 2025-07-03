@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, Calendar, TrendingUp, Award } from 'lucide-react';
+import { Users, Calendar, TrendingUp, Award ,BarChart} from 'lucide-react';
 
 const Stats = ({ employees, currentMonth }) => {
   const currentMonthBirthdays = employees.filter(emp => {
@@ -42,7 +42,7 @@ const Stats = ({ employees, currentMonth }) => {
     {
       icon: TrendingUp,
       label: 'Years of Service',
-      value: "15+",
+      value: '15+',
       color: 'blue'
     }
   ];
@@ -56,7 +56,12 @@ const Stats = ({ employees, currentMonth }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-xl font-semibold text-gray-800 mb-6">Statistics</h3>
+      <div className="flex items-center gap-3 mb-6">
+        <BarChart className="text-purple-600" size={24} />
+        <h3 className="text-xl font-semibold text-gray-800">
+          Statistics
+        </h3>
+      </div>
       
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, index) => (
