@@ -6,7 +6,8 @@ const Calendar = ({
   setSelectedDate, 
   setCurrentMonth, 
   hasBirthdayOnDate, 
-  isJoinDate 
+  isJoinDate,
+  
 }) => {
   const getDaysInMonth = (date) => new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   const getFirstDayOfMonth = (date) => new Date(date.getFullYear(), date.getMonth(), 1).getDay();
@@ -36,7 +37,7 @@ const Calendar = ({
 
       const hasBday = hasBirthdayOnDate(day);
       const hasJoin = isJoinDate(day);
-
+      const hasBoth = hasBday && hasJoin;
       days.push(
         <div
           key={day}
@@ -46,9 +47,15 @@ const Calendar = ({
               ? 'bg-purple-600 text-white border-purple-600' 
               : 'bg-white hover:bg-purple-50 border-gray-200 hover:border-purple-300'
             }
-            ${hasBday ? 'ring-2 ring-pink-400' : ''}
-            ${hasJoin ? 'ring-2 ring-green-400' : ''}
-            transition-all duration-200
+             ${
+        hasBoth
+          ? 'ring-2 ring-yellow-400'
+          : hasBday
+          ? 'ring-2 ring-pink-400'
+          : hasJoin
+          ? 'ring-2 ring-green-400'
+          : ''
+      }
           `}
           onClick={() =>
             setSelectedDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day))
@@ -98,14 +105,18 @@ const Calendar = ({
         {renderCalendar()}
       </div>
 
-      <div className="mt-4 flex justify-center gap-6 text-sm">
-        <div className="flex items-center gap-2">
+      <div className="mt-5 flex justify-center gap-6 text-sm">
+        <div className="flex items-center gap-3">
           <div className="text-lg ring-2 ring-pink-400">🎂</div>
           <span className="text-gray-600">Birthday</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="text-lg ring-2 ring-green-400">⭐</div>
-          <span className="text-gray-600">Work Anniversary</span>
+          <span className="text-gray-600">Anniversary</span>
+        </div>
+                <div className="flex items-center gap-2">
+          <div className="text-lg ring-2 ring-yellow-500">🎂⭐</div>
+          <span className="text-gray-600">Both Day</span>
         </div>
       </div>
     </div>
