@@ -58,7 +58,7 @@ const NotificationSetup = () => {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors shadow-md"
       >
-        <Settings size={20} />
+        <Settings className='animate-spin' size={20} />
         <span className="hidden sm:inline">Setup Notifications</span>
       </button>
 
