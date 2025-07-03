@@ -63,10 +63,10 @@ const Stats = ({ employees, currentMonth }) => {
         </h3>
       </div>
       
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 ">
         {stats.map((stat, index) => (
           <div key={index} className={`border rounded-lg p-4 ${colorClasses[stat.color]}`}>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 animate-pulse">
               <stat.icon size={24} />
               <div>
                 <p className="text-2xl font-bold">{stat.value}</p>
