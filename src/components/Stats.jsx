@@ -41,8 +41,8 @@ const Stats = ({ employees, currentMonth }) => {
     },
     {
       icon: TrendingUp,
-      label: 'Avg Years of Service',
-      value: avgYearsOfService.toFixed(1),
+      label: 'Years of Service',
+      value: "15+",
       color: 'blue'
     }
   ];
