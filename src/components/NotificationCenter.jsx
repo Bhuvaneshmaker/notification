@@ -11,10 +11,12 @@ const NotificationCenter = ({ employees }) => {
   const [stats, setStats] = useState({});
 
   useEffect(() => {
+    // Auto-check for notifications on component mount
     if (employees.length > 0) {
       checkTodayNotifications();
     }
 
+    // Set up interval to check notifications every hour
     const interval = setInterval(() => {
       if (employees.length > 0) {
         checkTodayNotifications();
@@ -32,9 +34,10 @@ const NotificationCenter = ({ employees }) => {
 
     setIsChecking(true);
     try {
+      console.log('🔍 Checking notifications for employees:', employees);
       const results = await notificationService.checkAndSendTodayNotifications(employees);
       setNotifications(results);
-
+      
       const successCount = results.filter(r => r.success && !r.skipped).length;
       const skippedCount = results.filter(r => r.skipped).length;
       const errorCount = results.filter(r => !r.success).length;
@@ -64,13 +67,20 @@ const NotificationCenter = ({ employees }) => {
   const sendTestNotification = async (employee, type) => {
     setIsTesting(true);
     try {
+      console.log(`🧪 Sending test ${type} notification to:`, employee);
       const result = await notificationService.sendTestNotification(employee, type);
-      if (result.success && result.results.email?.success) {
-        toast.success(`✅ Test ${type} email sent to ${employee.name}`);
+      
+      if (result.success) {
+        if (result.results.email?.success) {
+          toast.success(`✅ Test ${type} notification sent via email to ${employee.name}!`);
+        } else {
+          toast.error(`❌ Failed to send test notification to ${employee.name}`);
+        }
       } else {
-        toast.error(`❌ Failed to send test ${type} email to ${employee.name}`);
+        toast.error(`❌ Failed to send test notification to ${employee.name}`);
       }
     } catch (error) {
+      console.error('Test notification error:', error);
       toast.error(`Error sending test notification: ${error.message}`);
     } finally {
       setIsTesting(false);
@@ -131,30 +141,33 @@ const NotificationCenter = ({ employees }) => {
           <div className="p-4 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold text-gray-800">🔔 Notification Center</h3>
-              <button
-                onClick={checkTodayNotifications}
-                disabled={isChecking}
-                className="flex items-center gap-2 px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-gray-400 text-sm"
-              >
-                {isChecking ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Checking...</span>
-                  </>
-                ) : (
-                  <>
-                    <Send size={16} />
-                    <span>Check Now</span>
-                  </>
-                )}
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={checkTodayNotifications}
+                  disabled={isChecking}
+                  className="flex items-center gap-2 px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-gray-400 transition-colors text-sm"
+                  title="Check for today's celebrations"
+                >
+                  {isChecking ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Checking...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send size={16} />
+                      <span>Check Now</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Today's Celebrants */}
           {todayCelebrants.length > 0 ? (
             <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-200">
-              <h4 className="font-semibold text-purple-800 mb-3">
+              <h4 className="font-semibold text-purple-800 mb-3 flex items-center gap-2">
                 🎉 Today's Celebrations ({todayCelebrants.length})
               </h4>
               <div className="space-y-2">
@@ -163,21 +176,25 @@ const NotificationCenter = ({ employees }) => {
                     <div className="flex-1">
                       <p className="font-medium text-gray-900">{celebrant.name}</p>
                       <p className="text-sm text-gray-600">
-                        {celebrant.type === 'birthday'
-                          ? `🎂 ${celebrant.age}th Birthday`
-                          : `⭐ ${celebrant.years} Year Anniversary`}
+                        {celebrant.type === 'birthday' 
+                          ? `🎂 ${celebrant.age}th Birthday` 
+                          : `⭐ ${celebrant.years} Year Anniversary`
+                        }
                       </p>
-                      {celebrant.email && (
-                        <div className="flex items-center gap-1 text-xs text-blue-600 mt-1">
-                          <Mail size={12} />
-                          <span>Email</span>
-                        </div>
-                      )}
+                      <div className="flex items-center gap-2 mt-1">
+                        {celebrant.email && (
+                          <div className="flex items-center gap-1 text-xs text-blue-600">
+                            <Mail size={12} />
+                            <span>Email</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <button
                       onClick={() => sendTestNotification(celebrant, celebrant.type)}
                       disabled={isTesting}
-                      className="flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700 disabled:bg-gray-400"
+                      className="flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700 disabled:bg-gray-400 transition-colors"
+                      title="Send test notification"
                     >
                       <TestTube size={14} />
                       {isTesting ? 'Sending...' : 'Test'}
@@ -189,6 +206,48 @@ const NotificationCenter = ({ employees }) => {
           ) : (
             <div className="p-4 bg-gray-50 border-b border-gray-200">
               <p className="text-gray-600 text-center">No celebrations today 😊</p>
+            </div>
+          )}
+
+          {/* Test Section for All Employees */}
+          {employees.length > 0 && (
+            <div className="p-4 border-b border-gray-200">
+              <h4 className="font-semibold text-gray-800 mb-3">🧪 Test Notifications</h4>
+              <div className="space-y-2">
+                {employees.slice(0, 3).map((employee, index) => (
+                  <div key={index} className="flex items-center justify-between bg-gray-50 rounded-lg p-2">
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-900">{employee.name}</p>
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        {employee.email && (
+                          <div className="flex items-center gap-1">
+                            <Mail size={10} />
+                            <span>{employee.email}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => sendTestNotification(employee, 'birthday')}
+                        disabled={isTesting}
+                        className="px-2 py-1 bg-pink-600 text-white rounded text-xs hover:bg-pink-700 disabled:bg-gray-400 transition-colors"
+                        title="Test birthday notification"
+                      >
+                        🎂
+                      </button>
+                      <button
+                        onClick={() => sendTestNotification(employee, 'anniversary')}
+                        disabled={isTesting}
+                        className="px-2 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700 disabled:bg-gray-400 transition-colors"
+                        title="Test anniversary notification"
+                      >
+                        ⭐
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
@@ -209,13 +268,17 @@ const NotificationCenter = ({ employees }) => {
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-900">
                         {notification.employee} - {notification.type}
+                        {notification.age && ` (${notification.age} years old)`}
+                        {notification.years && ` (${notification.years} years)`}
                       </p>
-                      {notification.results?.email?.success && (
-                        <div className="flex items-center gap-1 text-xs text-blue-600 mt-1">
-                          <Mail size={10} />
-                          <span>Email ✓</span>
-                        </div>
-                      )}
+                      <div className="flex items-center gap-2 mt-1">
+                        {notification.results?.email?.success && (
+                          <div className="flex items-center gap-1 text-xs text-blue-600">
+                            <Mail size={10} />
+                            <span>Email ✓</span>
+                          </div>
+                        )}
+                      </div>
                       {!notification.success && (
                         <p className="text-xs text-red-600 mt-1">
                           {notification.error || 'Failed to send'}
