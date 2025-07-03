@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, User, Mail, Building, Calendar, Phone } from 'lucide-react';
+import { Plus, User, Mail, Building, Calendar, Phone, User2 } from 'lucide-react';
 
 const EmployeeForm = ({ onAddEmployee, isLoading }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,7 +45,12 @@ const EmployeeForm = ({ onAddEmployee, isLoading }) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold text-gray-800">Add New Employee</h3>
+        <div className="flex items-center gap-3 mb-6">
+        <User2 className="text-purple-600" size={24} />
+        <h3 className="text-xl font-semibold text-gray-800">
+          Add New Employee
+        </h3>
+      </div>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
