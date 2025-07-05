@@ -2,10 +2,10 @@ import emailjs from 'emailjs-com';
 
 // EmailJS Configuration
 const EMAILJS_CONFIG = {
-  serviceId: 'service_3vpz11v',
-  birthdayTemplateId: 'template_btpxixl',
-  anniversaryTemplateId: 'template_aeteyjk',
-  userId: '7y2RRXhY4jQpcyrOa'
+  serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID,
+  birthdayTemplateId: import.meta.env.VITE_EMAILJS_BIRTHDAY_TEMPLATE_ID,
+  anniversaryTemplateId: import.meta.env.VITE_EMAILJS_ANNIVERSARY_TEMPLATE_ID,
+  userId: import.meta.env.VITE_EMAILJS_USER_ID,
 };
 
 class NotificationService {
