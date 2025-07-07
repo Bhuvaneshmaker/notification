@@ -6,7 +6,7 @@ const TodaysCelebrations = ({ todaysBirthdays, todayJoin, calculateAge, getYears
     <>
       {/* Today's Birthdays */}
       {todaysBirthdays.length > 0 && (
-        <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg shadow-lg p-6 mb-6">
+        <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg shadow-lg p-6 mb-6 gap-1">
           <h2 className="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
             <Star className="text-yellow-300 animate-spin" />
             🎉 Today's Birthday Celebrations! 🎉  <Heart className='text-red-300 animate-bounce'/>
@@ -29,7 +29,7 @@ const TodaysCelebrations = ({ todaysBirthdays, todayJoin, calculateAge, getYears
 
       {/* Today's Work Anniversaries */}
       {todayJoin.length > 0 && (
-        <div className="bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-lg shadow-lg p-6 mb-6">
+        <div className="bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-lg shadow-lg p-6 mb-6 gap-1">
           <h2 className="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
             <Star className="text-yellow-300 animate-spin" />
             🎉 Work Anniversary Celebrations! 🎉<Heart className='text-red-300 animate-bounce'/>
