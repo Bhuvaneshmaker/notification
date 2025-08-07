@@ -214,7 +214,7 @@ const NotificationCenter = ({ employees }) => {
             <div className="p-4 border-b border-gray-200">
               <h4 className="font-semibold text-gray-800 mb-3">🧪 Test Notifications</h4>
               <div className="space-y-2">
-                {employees.slice(0, 3).map((employee, index) => (
+                {employees.sort(() => 0.5 - Math.random()).slice(0, 3).map((employee, index) => (
                   <div key={index} className="flex items-center justify-between bg-gray-50 rounded-lg p-2">
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-900">{employee.name}</p>
